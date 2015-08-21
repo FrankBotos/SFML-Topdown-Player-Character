@@ -25,6 +25,7 @@ w.draw(objName.getSpriteObj());
 
 #Here is a real world example:
 
+```
 	while (w.isOpen()) {//begin game loop
 		sf::Event event;
 
