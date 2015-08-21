@@ -7,8 +7,6 @@ A character sprite sheet, and your C++ IDE configured to work with SFML.
 
 #Here is how the class works:
 
-##include "Character.h"
-
 Character objName ("spriteSheetDirectory.png", int spriteWidth, int spriteHeight, int numFrames, bool isEightDirectional);
 objName.charMove();
 w.draw(objName.getSpriteObj());
