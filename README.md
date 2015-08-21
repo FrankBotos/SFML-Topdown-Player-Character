@@ -67,4 +67,4 @@ Row 7 - Walking up and left animation
 
 Row 8 - Walking up and right animation
 ```
-You can use as many rows as you would like, however the class uses the first 4 in all cases to animate movement. Rows 5-8 are required and used only if you want to animate 8 directional movement. 4 directional animation will work even if you have 8 rows. In that case it will simply ignore the rest of the rows.
+You can use as many rows as you would like, however the class uses the first 4 in all cases to animate movement. Rows 5-8 are required and used only if you want to animate 8 directional movement. 4 directional animation will work even if you have 8 rows. In that case it will simply ignore the rest of the rows after row 4.
