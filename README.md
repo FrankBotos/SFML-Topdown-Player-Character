@@ -32,8 +32,8 @@ w.draw(objName.getSpriteObj());
 		w.clear();//clearing before drawing new frame
 
 		/*DRAWING IS TO BE DONE BETWEEN CLEAR AND DISPLAY*/
-		test.charMove();
-		w.draw(test.getSpriteObj());
+		objName.charMove();
+		w.draw(objName.getSpriteObj());
 
 		w.display();//end current frame, display its contents on the screen
 	}
