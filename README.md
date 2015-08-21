@@ -5,9 +5,9 @@ All you, the user, needs to have are the following:
 
 A character sprite sheet, and your C++ IDE configured to work with SFML.
 
-Here is how the class works:
+#Here is how the class works:
 
-#include "Character.h"
+##include "Character.h"
 
 Character objName ("spriteSheetDirectory.png", int spriteWidth, int spriteHeight, int numFrames, bool isEightDirectional);
 objName.charMove();
