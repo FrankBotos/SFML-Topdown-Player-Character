@@ -12,14 +12,15 @@ A character sprite sheet, and your C++ IDE configured to work with SFML.
 Character objName ("spriteSheetDirectory.png", int spriteWidth, int spriteHeight, int numFrames, bool isEightDirectional);
 
 2) From an SFML window, call the charMove function. This starts a perpetual loop that animates and moves the character based on user input. Default keys are the arrow keys.
+
 objName.charMove();
 
 3)From an SMFL window, draw the sprite.
 w.draw(objName.getSpriteObj());
 
 #Here is a real world example:
-//begin game loop
-	while (w.isOpen()) {
+
+	while (w.isOpen()) {//begin game loop
 		sf::Event event;
 
 		while (w.pollEvent(event)) {//processing events
