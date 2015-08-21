@@ -16,9 +16,12 @@ Character objName ("spriteSheetDirectory.png", int spriteWidth, int spriteHeight
 2) From an SFML window, call the charMove function. This starts a perpetual loop that animates and moves the character based on user input. Default keys are the arrow keys. Here is a real world example:
 ```
 objName.charMove();
+```
 
 3)From an SMFL window, draw the sprite.
+```
 w.draw(objName.getSpriteObj());
+```
 
 #Here is a real world example:
 
