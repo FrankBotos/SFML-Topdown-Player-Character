@@ -52,6 +52,7 @@ Row 3 - Walking up animation
 
 Row 4 - Walking right animation
 
+
 If you are using eight directional animation:
 
 Row 5 - Walking down and left animation
