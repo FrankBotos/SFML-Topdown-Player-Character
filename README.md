@@ -47,7 +47,7 @@ w.draw(objName.getSpriteObj());
 This class depends on an enum to function correctly. It takes rectangular chunks out of the defined image and animates them. Therefore, it is very important that your sprite sheet is formatted exactly so that each "frame" fits into the exact same sized square or rectangular dimensions.
 
 Furthermore, the rows must be lined up as such:
-
+```
 Row 1 - Walking down animation
 
 Row 2 - Walking left animation
@@ -66,3 +66,5 @@ Row 6 - Walking down and right animation
 Row 7 - Walking up and left animation
 
 Row 8 - Walking up and right animation
+```
+You can use as many rows as you would like, however the class uses the first 4 in all cases to animate movement. Rows 5-8 are required and used only if you want to animate 8 directional movement. 4 directional animation will work even if you have 8 rows. In that case it will simply ignore the rest of the rows.
