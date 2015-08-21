@@ -13,7 +13,7 @@ The class will animate and move the player based on user input for you.
 ```
 Character objName ("spriteSheetDirectory.png", int spriteWidth, int spriteHeight, int numFrames, bool isEightDirectional);
 ```
-2) From an SFML window, call the charMove function. This starts a perpetual loop that animates and moves the character based on user input. Default keys are the arrow keys.
+2) From an SFML window, call the charMove function. This starts a perpetual loop that animates and moves the character based on user input. Default keys are the arrow keys. Here is a real world example:
 ```
 objName.charMove();
 
