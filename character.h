@@ -1,13 +1,14 @@
 #pragma once
 #include <SFML\Graphics.hpp>
+#include "worldObject.h"
 #include <string>
 
 //basic "character" class that creates an in game character
 //sprite directory is specified in constructor argument along with dimensions in sprite sheet
 //example instantiation:
-//Character foo("spritedirectory.png",32,32,5,true);
+//Character foo("spritedirectory.png");
 
-class Character {
+class Character : public sf::Drawable {//publically inheriting from "Drawable" class for cleaner syntax when drawing to screen
 private:
 	sf::Sprite _character;
 	sf::Texture _t;//the texture needs to be a private variable so it does not go out of scope until destructor
@@ -26,8 +27,6 @@ private:
 		downRight = 5,
 		upLeft = 6,
 		upRight = 7,
-		
-
 	};
 	Facing dir;//dir represents not only direction but also the "row" on the sprite shee that is being used for animation
 
@@ -41,14 +40,27 @@ private:
 	int spriteHeight;
 	int numFrames;
 
-	float moveSpeed;
+	bool slopingMovement;//bool passed to constructor to decide movement method
+
+	float xSpeed;//used for sloping movement
+	float ySpeed;
+	float xDecrease;
+	float yDecrease;
+	float maxSpeed;
+	sf::FloatRect collisionBox;
+	bool collision;
+
+	float moveSpeed = 0.015f;//used for static movement
 
 	bool eightDirections;
 
 public:
-	Character(std::string filename, int sprW, int sprH, int nFrames, bool eightDir = false);
+	Character(std::string filename, int sprW, int sprH, int nFrames, bool eightDir = false, bool slopingMovement = false);
 	~Character();
-	sf::Sprite getSpriteObj();
-	virtual void charMove();
+	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+	void charMove();
+	virtual void charMoveStatic();
+	virtual void charMoveSloping();
 	virtual void animate(bool isMoving);
+	void checkCollision(WorldObject& obj);
 };
