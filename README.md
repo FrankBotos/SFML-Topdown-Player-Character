@@ -74,7 +74,7 @@ This feature is still undergoing work, however, it is available for use, and sho
 
 To use collision detection:
 
-1)Use the WorldObject class to create inatimate in-game objects. You can also inherit from this if you wish to customize your game object further!
+1)Use the WorldObject class to create inanimate in-game objects. You can also inherit from this if you wish to customize your game object further!
 
 ```
 WorldObject block("spriteDirectory.png",int xSize, int ySize, int xPos, int yPos);
