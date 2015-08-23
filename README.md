@@ -68,3 +68,25 @@ Row 7 - Walking up and left animation
 Row 8 - Walking up and right animation
 ```
 You can use as many rows as you would like, however the class uses the first 4 in all cases to animate movement. Rows 5-8 are required and used only if you want to animate 8 directional movement. 4 directional animation will work even if you have 8 rows. In that case it will simply ignore the rest of the rows after row 4.
+
+#Basic collision detection is also available!
+This feature is still undergoing work, however, it is available for use, and should provide satisfactory collision detection for top down 2D games.
+
+To use collision detection:
+
+1)Use the WorldObject class to create inatimate in-game objects. You can also inherit from this if you wish to customize your game object further!
+
+```
+WorldObject block("spriteDirectory.png",int xSize, int ySize, int xPos, int yPos);
+```
+
+2)Draw it (make sure you do this in an SMFL window loop)!
+```
+window.draw(block);
+```
+This will actually output the object you created earlier on the screen, at whatever coordinates you specified!
+
+3)Pass it to your player character for collision checking! (This is also done in the SFML window loop)
+```
+playerCharacter.checkCollision(block);
+```
