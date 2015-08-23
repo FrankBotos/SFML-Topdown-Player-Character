@@ -1,8 +1,8 @@
 #include "character.h"
+#include <iostream>
 
-//constructor takes a string argument holding file location of sprite, sprite width, sprite height, number of frames, and a bool
-//for 8 directional animation
-Character::Character(std::string filename, int sprW, int sprH, int nFrames, bool eightDirs) {
+//constructor takes a string argument holding file location of sprite, sprite width, and sprite height
+Character::Character(std::string filename, int sprW, int sprH, int nFrames, bool eightDirs, bool slopeMove) {
 	//loading a file in directory "filename"
 	if (_t.loadFromFile(filename)) {
 		_character = sf::Sprite(_t);
@@ -14,7 +14,7 @@ Character::Character(std::string filename, int sprW, int sprH, int nFrames, bool
 	numFrames = nFrames - 1;//needs to be one less than actual amount of frames, as 0 counts as first frame
 
 	dir = down;//initilizating direction (player will face down @ spawn)
-
+	
 	//focusing in on first frame to display upon creation, so that not the entire sprite sheet is shown
 	_character.setTextureRect(sf::IntRect(0, 0, spriteWidth, spriteHeight));
 
@@ -22,20 +22,67 @@ Character::Character(std::string filename, int sprW, int sprH, int nFrames, bool
 	timeToWait = sf::milliseconds(85);
 	nextFrameTime = timeToWait;
 
-	moveSpeed = 0.01;
-
 	eightDirections = eightDirs;//bool value, if false 4 directional animation, if true, 8 directional animation, defaults to 4
+	slopingMovement = slopeMove;//bool balue, if false, character speeds are static, if true, character speed "slopes" to a limit, then slopes back down to zero upon key release
+
+	if (slopingMovement) {
+		xSpeed = 0.0f;
+		ySpeed = 0.0f;
+		xDecrease = 0.0005f;
+		yDecrease = 0.0005f;
+		maxSpeed = 0.01f;
+	}
 
 }
 
 Character::~Character() {};//default destructor
 
-//returns current Sprite object
-sf::Sprite Character::getSpriteObj() {
-	return _character;
+void Character::draw(sf::RenderTarget& target, sf::RenderStates states) const {
+	target.draw(_character);
 }
 
 void Character::charMove() {
+	if (slopingMovement) { charMoveSloping(); }
+	if (!slopingMovement) { charMoveStatic(); }
+	std::cout << dir << std::endl;
+}
+
+void Character::checkCollision(WorldObject& obj) {
+	collision = false;//defaullt collision to false
+	collisionBox = _character.getGlobalBounds();
+	if (collisionBox.intersects(obj.getCollisionBox())) {//update collision
+		collision = true;
+		//here we are checking keyboard values instead of dir enum because dir enum can be unreliable
+		//if we are using only 4-directional movement
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
+			_character.setPosition(_character.getPosition().x, _character.getPosition().y-1);
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
+			_character.setPosition(_character.getPosition().x, _character.getPosition().y + 1);
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
+			_character.setPosition(_character.getPosition().x + 1, _character.getPosition().y);
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
+			_character.setPosition(_character.getPosition().x - 1, _character.getPosition().y);
+		}
+		//it is fine to check the dir enum for 8-directional collision checking
+		if (dir == downRight) {
+			_character.setPosition(_character.getPosition().x - 1, _character.getPosition().y - 1);
+		}
+		if (dir == downLeft) {
+			_character.setPosition(_character.getPosition().x + 1, _character.getPosition().y - 1);
+		}
+		if (dir == upRight) {
+			_character.setPosition(_character.getPosition().x - 1, _character.getPosition().y + 1);
+		}
+		if (dir == upLeft) {
+			_character.setPosition(_character.getPosition().x + 1, _character.getPosition().y + 1);
+		}
+	}
+}
+
+void Character::charMoveStatic() {
 
 	bool isMoving = false;
 
@@ -98,8 +145,76 @@ void Character::charMove() {
 		|| sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
 		isMoving = true;
 	}
-
+	
 	animate(isMoving);//calling own animate function every frame
+}
+
+void Character::charMoveSloping() {
+	bool isMoving = false;
+
+	//setting speed variables depending on input
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && xSpeed < maxSpeed) {
+		xSpeed += (nextFrameTime - currentFrameTime).asMilliseconds() * .000025f;
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && xSpeed > -maxSpeed) {
+		xSpeed -= (nextFrameTime - currentFrameTime).asMilliseconds() * .000025f;
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) && ySpeed < maxSpeed) {
+		ySpeed += (nextFrameTime - currentFrameTime).asMilliseconds() * .000025f;
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && ySpeed > -maxSpeed) {
+		ySpeed -= (nextFrameTime - currentFrameTime).asMilliseconds() * .000025f;
+	}
+
+	//stopping movement if no user input
+	if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && xSpeed > 0) {
+		xSpeed -= xDecrease;
+		if (xSpeed < 0) {
+			xSpeed = 0;
+		}
+	}
+	if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && xSpeed < 0) {
+		xSpeed += xDecrease;
+		if (xSpeed > 0) {
+			xSpeed = 0;
+		}
+	}
+	if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && ySpeed < 0) {
+		ySpeed += yDecrease;
+		if (ySpeed > 0) {
+			ySpeed = 0;
+		}
+	}
+	if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Down) && ySpeed > 0) {
+		ySpeed -= yDecrease;
+		if (ySpeed < 0) {
+			ySpeed = 0;
+		}
+	}
+
+
+
+	//finding direction
+	if (xSpeed < 0) { dir = left; }
+	if (xSpeed > 0) { dir = right; }
+	if (ySpeed < 0) { dir = up; }
+	if (ySpeed > 0) { dir = down; }
+	
+	if (eightDirections) {
+		if (xSpeed < 0 && ySpeed < 0) { dir = upLeft; }
+		if (xSpeed > 0 && ySpeed < 0) { dir = upRight; }
+		if (xSpeed < 0 && ySpeed > 0) { dir = downLeft; }
+		if (xSpeed > 0 && ySpeed > 0) { dir = downRight; }
+	}
+	
+	//actually moving character
+	_character.move(xSpeed,ySpeed);
+
+	//calling animate function
+	if (xSpeed != 0 || ySpeed != 0) { isMoving = true; }
+	else { isMoving = false; }
+	animate(isMoving);
+
 }
 
 //is called during every update from move function
@@ -108,7 +223,7 @@ void Character::animate(bool isMoving) {
 	//finds the exact time that current frame executes
 	//time value for "next frame" is initialized in constructor
 	currentFrameTime = frameTimer.getElapsedTime();
-
+	
 	if (currentFrameTime > nextFrameTime) {//execute if the current frame time has surpassed the next frame's expected display time
 		nextFrameTime = currentFrameTime + timeToWait;
 		if (isMoving) {//if player is currently moving, anime sprite
