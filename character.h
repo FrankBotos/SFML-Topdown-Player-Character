@@ -13,16 +13,15 @@ private:
 	sf::Sprite _character;
 	sf::Texture _t;//the texture needs to be a private variable so it does not go out of scope until destructor
 
-	//used in conjunction with sprite sheet
-	//directions should correspond to actual order of animatoin rows on sprite sheet
+				   //used in conjunction with sprite sheet
+				   //directions should correspond to actual order of animatoin rows on sprite sheet
 	enum Facing {
 
 		down = 0,//row zero on sprite sheet
 		left = 1,//row one on sprite sheet
-		up = 2,//row two on sprite sheet
-		right = 3,//row three on sprite sheet
-
-		//these are used for 8 directional animation!
+		up = 3,//row two on sprite sheet
+		right = 2,//row three on sprite sheet
+				  //these are used for 8 directional animation!
 		downLeft = 4,
 		downRight = 5,
 		upLeft = 6,
