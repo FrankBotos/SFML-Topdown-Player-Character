@@ -6,7 +6,7 @@
 
 //inhereting from drawable for syntactically clean drawing
 //inheriting from Transformable so that object may be altered if needed
-class WorldObject : public sf::Drawable{
+class WorldObject : public sf::Drawable {
 private:
 	sf::Sprite _sprite;
 	sf::Texture _texture;
@@ -21,7 +21,7 @@ public:
 	~WorldObject();
 	//implementing draw function for easier draw syntax
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
-	
+
 	sf::FloatRect getCollisionBox();
 
 };
