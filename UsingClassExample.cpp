@@ -7,8 +7,8 @@ int main() {
 	sf::RenderWindow w(sf::VideoMode(1280, 720), "Test!");
 
 	//Character test("sprites/playerCharacter8.png", 32, 32, 6, true, true);
-	Character test("sprites/playerCharacter8.png",32,32,5,true,false);
-	WorldObject block("sprites/block.png",597,434,200,200);
+	Character test("sprites/playerCharacter8.png", 32, 32, 6, true, false);
+	WorldObject block("sprites/block.png", 256, 128, 200, 200);
 
 	//begin game loop
 	while (w.isOpen()) {
@@ -23,7 +23,7 @@ int main() {
 		/*DRAWING IS TO BE DONE BETWEEN CLEAR AND DISPLAY*/
 		w.draw(block);
 		w.draw(test);
-		test.checkCollision(block);
+		test.checkCollision(block);//to test collision, you pass the block object to collision player character's collision function each update
 		test.charMove();
 
 		w.display();//end current frame, display its contents on the screen
